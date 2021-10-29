@@ -223,9 +223,54 @@ for(p in 1:length(group_type)){
         
         assign(paste("concordance", group_type[p], var_int[i], death_var[k], sep = "_"), concordance_summary)
         
+        #######################################################################
+        # Schoenfeld Residuals.
+        models <- c("res_cox_uni", "res_cox_multi_2", "res_cox_multi_3", "res_cox_multi_4",
+                    "res_cox_uni_VO2", "res_cox_multi_2_VO2", "res_cox_multi_3_VO2")
+        temp_summary <- data.frame(c(var_int[i], "age", "sex", "record_year", "obesity", "hypertension", 
+                                     "dyslipidemia", "diabetes", "inactivity", "smoker", "VO2_rel", "GLOBAL"))
+        
+        for(j in 1:length(models)){
+          # Create a table of the Schoenfeld Residuals.
+          temp_sch_resid <- cox.zph(get(paste(models)[j]))$table
+          
+          # The output to the table differs for the VO2 models.
+          if(substr(models[j], (nchar(models[j])-2), (nchar(models[j]))) != "VO2"){
+            for(r in 1:nrow(temp_sch_resid)){
+              # Add a symbol to make it easier to identify significant residuals.
+              sig_sym <- ifelse((temp_sch_resid[r,"p"] < 0.05), "**", "")
+              
+              # Add the "global" residual to the bottom of the output.
+              if(r != nrow(temp_sch_resid)){
+                temp_summary[r, paste(models[j], "p-value")] <- paste(sig_sym, round(temp_sch_resid[r,"p"], 5))
+              } else {
+                temp_summary[nrow(temp_summary), paste(models[j], "p-value")] <- paste(sig_sym, round(temp_sch_resid[r,"p"], 5))
+              }
+            }
+          } else {
+            # Here I add the output from the VO2 models.
+            for(r in 1:nrow(temp_sch_resid)){
+              # Add a symbol to make it easier to identify significant residuals.
+              sig_sym <- ifelse((temp_sch_resid[r,"p"] < 0.05), "**", "")
+              
+              # Add the "global" residual to the bottom of the output.
+              if(r == 1){
+                temp_summary[nrow(temp_summary)-1, paste(models[j], "p-value")] <- paste(sig_sym, round(temp_sch_resid[r,"p"], 5))
+              } else if (r != nrow(temp_sch_resid)){
+                temp_summary[r+1, paste(models[j], "p-value")] <- paste(sig_sym, round(temp_sch_resid[r,"p"], 5))
+              } else {
+                temp_summary[nrow(temp_summary), paste(models[j], "p-value")] <- paste(sig_sym, round(temp_sch_resid[r,"p"], 5))
+              }
+            }
+          }
+        }
+        
+        temp_summary[nrow(temp_summary)+2, 2] <- paste("** significant residual, needs to be graphed.")
+        assign(paste("residuals", group_type[p], var_int[i], death_var[k], sep = "_"), temp_summary)
+        
         
         rm(temp_df, models, temp_summary, res_cox_uni, res_cox_multi_2, res_cox_multi_3, res_cox_multi_4,
-           res_cox_uni_VO2, res_cox_multi_2_VO2, res_cox_multi_3_VO2, concordance_summary) 
+           res_cox_uni_VO2, res_cox_multi_2_VO2, res_cox_multi_3_VO2, concordance_summary, temp_sch_resid) 
         rm(counter, temp_vec, int_model, VO2_models)
         
       } else {
@@ -388,9 +433,54 @@ for(p in 1:length(group_type)){
         
         assign(paste("concordance", group_type[p], var_int[i], death_var[k], sep = "_"), concordance_summary)
         
+        #######################################################################
+        # Schoenfeld Residuals.
+        models <- c("res_cox_uni", "res_cox_multi_2", "res_cox_multi_3", "res_cox_multi_4",
+                    "res_cox_uni_VO2", "res_cox_multi_2_VO2", "res_cox_multi_3_VO2")
+        temp_summary <- data.frame(c(var_int[i], "age", "record_year", "obesity", "hypertension", 
+                                     "dyslipidemia", "diabetes", "inactivity", "smoker", "VO2_rel", "GLOBAL"))
+        
+        for(j in 1:length(models)){
+          # Create a table of the Schoenfeld Residuals.
+          temp_sch_resid <- cox.zph(get(paste(models)[j]))$table
+          
+          # The output to the table differs for the VO2 models.
+          if(substr(models[j], (nchar(models[j])-2), (nchar(models[j]))) != "VO2"){
+            for(r in 1:nrow(temp_sch_resid)){
+              # Add a symbol to make it easier to identify significant residuals.
+              sig_sym <- ifelse((temp_sch_resid[r,"p"] < 0.05), "**", "")
+              
+              # Add the "global" residual to the bottom of the output.
+              if(r != nrow(temp_sch_resid)){
+                temp_summary[r, paste(models[j], "p-value")] <- paste(sig_sym, round(temp_sch_resid[r,"p"], 5))
+              } else {
+                temp_summary[nrow(temp_summary), paste(models[j], "p-value")] <- paste(sig_sym, round(temp_sch_resid[r,"p"], 5))
+              }
+            }
+          } else {
+            # Here I add the output from the VO2 models.
+            for(r in 1:nrow(temp_sch_resid)){
+              # Add a symbol to make it easier to identify significant residuals.
+              sig_sym <- ifelse((temp_sch_resid[r,"p"] < 0.05), "**", "")
+              
+              # Add the "global" residual to the bottom of the output.
+              if(r == 1){
+                temp_summary[nrow(temp_summary)-1, paste(models[j], "p-value")] <- paste(sig_sym, round(temp_sch_resid[r,"p"], 5))
+              } else if (r != nrow(temp_sch_resid)){
+                temp_summary[r+1, paste(models[j], "p-value")] <- paste(sig_sym, round(temp_sch_resid[r,"p"], 5))
+              } else {
+                temp_summary[nrow(temp_summary), paste(models[j], "p-value")] <- paste(sig_sym, round(temp_sch_resid[r,"p"], 5))
+              }
+            }
+          }
+        }
+        
+        temp_summary[nrow(temp_summary)+2, 2] <- paste("** significant residual, needs to be graphed.")
+        assign(paste("residuals", group_type[p], var_int[i], death_var[k], sep = "_"), temp_summary)
+        
         
         rm(temp_df, models, temp_summary, res_cox_uni, res_cox_multi_2, res_cox_multi_3, res_cox_multi_4,
-           res_cox_uni_VO2, res_cox_multi_2_VO2, res_cox_multi_3_VO2, concordance_summary) 
+           res_cox_uni_VO2, res_cox_multi_2_VO2, res_cox_multi_3_VO2, concordance_summary, temp_sch_resid) 
         rm(counter, temp_vec, int_model, VO2_models)
         
       }
@@ -401,6 +491,30 @@ for(p in 1:length(group_type)){
   
 }
 
+#######################################################################
+# Schoenfeld Residual graphs 
+# Created if significant (p<0.05) residuals found.
+# (relatively horizontal lines indicate model assumptions are met).
+#######################################################################
+
+# Age from COP full model (#4) of whole cohort.
+res_cox_multi_4_all <- coxph(Surv(follow_up_yrs, mortality_status) ~ COP + age + sex +
+                           obesity + hypertension + dyslipidemia + diabetes + inactivity + smoker +
+                           record_year + VO2_rel, data = data)
+cox.zph(res_cox_multi_4_all)
+plot(cox.zph(res_cox_multi_4_all)[2])
+
+# Age from COP full model (#4) of MALES.
+res_cox_multi_4_male <- coxph(Surv(follow_up_yrs, mortality_status) ~ COP + age +
+                           obesity + hypertension + dyslipidemia + diabetes + inactivity + smoker +
+                           record_year + VO2_rel, data = filter(data, sex == "Male"))
+cox.zph(res_cox_multi_4_male)
+plot(cox.zph(res_cox_multi_4_male)[2])
+
+# Age from VO2 univariate model (#1) of FEMALES.
+res_cox_uni_female <- coxph(Surv(follow_up_yrs, mortality_status) ~ VO2_rel, data = filter(data, sex == "Female"))
+cox.zph(res_cox_uni_female)
+plot(cox.zph(res_cox_uni_female)[1])
 
 ###############################################################################
 # Mean ± SD Statistics.
@@ -788,4 +902,4 @@ y <- list("characteristics" = all_summary_data,
           
           "data" = data)
 
-write_xlsx(y, here::here("../COP Results_10_29_2021.xlsx"))
+write_xlsx(y, here::here("../COP Results_10_29_2021_updated_ACSM_risks.xlsx"))
