@@ -2,38 +2,39 @@
 library(readxl)
 library(dplyr)
 library(writexl)
-library(FRIENDanalysis) 
 
-data <- read_excel(here::here("BALLST_cohort_dataset.xlsx"))
+data <- read_excel(here::here("../BALLST_healthy_cohort_dataset.xlsx"))
 
 
 ###########################################################################################
 # Dropping tests.
 ###########################################################################################
 
-# Includes only those with an RER>=1.0 (and drops those with missing RER).
+# Include only those with an RER>=1.0.
 data <- data %>% filter(max_rer >= 1.0)
 
-# Keeps only treadmill tests.
+# Keep only treadmill tests.
 data <- filter(data, test_mode=="TM")
 
-# Drops individuals aged over 85 or under 18.
+# Drop individuals aged over 85 or under 18.
 data <- data[!(data$age>85 | data$age<18),]
 
-# Drops those taking beta blocker medications (keeps them if value is missing).
+# Drop those taking beta blocker medications (keeps them if value is missing).
 data <- data[!(data$med_beta %in% 1),]
 
-# Includes only TESTS performed before the year 2019 
+# Include only tests performed before the year 2019 
 # (NDI searched through 2019 and want >=1 year follow-up).
 data <- data %>% filter(record_year<2019)
 
 # Drops those if they passed away within 1 year of exercise test.
+# (again, want >=1 year follow-up).
 data <- mutate(data, date_diff = difftime(data$death_date, data$record_date, units = "days"))
 data$date_diff[is.na(data$date_diff)] <- 1000
 data <- filter(data, data$date_diff>365)
 data$date_diff <- NULL
 
-# Drops individuals who don't have these key variables (want everyone to have all covariates).
+# Drops individuals who don't have these key variables 
+# (want everyone to have all covariates for cox regressions).
 var_int <- c("VO2_rel", "sex", "age", "mortality_status", 
              "obesity", "hypertension", "dyslipidemia", "diabetes", "inactivity", 
              "smoker", "record_year")
@@ -43,7 +44,7 @@ data <- data[complete.cases(data[,var_int]),]
 # Find the COP from the "minute" dataset.
 #####################################################################
 
-data_min_all <- read_excel(here::here("FileMaker Minutes Download_10_13_2021.xlsx"),
+data_min_all <- read_excel(here::here("../FileMaker Minutes Download_10_13_2021.xlsx"),
                            na = "?")
 
 # Rename the two key column labels used to sort.
@@ -74,7 +75,7 @@ data_min <- data_min %>%
 data_min <- data_min %>% 
   mutate_at(.vars = col_int,
             .funs = list(~replace(.,grepl("n", ., ignore.case = T),NA)))
-# Before converting to numeric, fix some data entry issues (should all be fixed now in FileMaker).
+# Before converting to numeric, fix some data entry issues (should all be fixed now in database).
 data_min$`VE BTPS1`[data_min$`VE BTPS1` == "22..17"] <- "22.17"
 data_min$`VE BTPS3`[data_min$`VE BTPS3` == "\\"] <- NA
 data_min$`VE BTPS4`[data_min$`VE BTPS4` == "b/a"] <- NA
@@ -89,7 +90,7 @@ data_min[] <- lapply(data_min, as.numeric)
 # Add in the calculated COP (minimum value of VE/VO2 in a given minute).
 #####################################################################
 
-# Add columns to the MAIN dataset.
+# Add COP column to the MAIN dataset.
 data <- mutate(data, COP = NA)
 
 # Now add in COP (find lowest VE/VO2 from minute data and add that to data.
@@ -138,14 +139,11 @@ for(i in 1:nrow(data_min)){
         data$COP[(data$ID == as.numeric(temp_id)) &
                    (data$test_number == as.numeric(temp_test_num))] <- min(cop_vec, na.rm = T)
       }
-      
-      
     }
   }
 }
 rm(cop_vec, temp_id, test_time_temp, num_col_to_use, temp_test_num, temp_ve, temp_vo2, wt)
 
-# jp <- select(data, ID, test_number, COP)
 
 #####################################################################
 # Finalize dataset for mortality analysis.
@@ -170,4 +168,4 @@ data <- mutate(data, FRIEND_pct =
 # Save files.
 ###########################################################################################
 
-write_xlsx(data, here::here("CLEANED COP dataset.xlsx"))
+write_xlsx(data, here::here("../CLEANED COP dataset_10_29_2021.xlsx"))
