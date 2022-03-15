@@ -27,7 +27,7 @@ data <- data[!(data$med_beta %in% 1),]
 data <- data %>% filter(record_year<2019)
 
 # Drops those if they passed away within 1 year of exercise test.
-# (again, want >=1 year follow-up).
+# (again, want >=1 year follow-up to account for possible underlying disease).
 data <- mutate(data, date_diff = difftime(data$death_date, data$record_date, units = "days"))
 data$date_diff[is.na(data$date_diff)] <- 1000
 data <- filter(data, data$date_diff>365)
@@ -75,7 +75,8 @@ data_min <- data_min %>%
 data_min <- data_min %>% 
   mutate_at(.vars = col_int,
             .funs = list(~replace(.,grepl("n", ., ignore.case = T),NA)))
-# Before converting to numeric, fix some data entry issues (should all be fixed now in database).
+# Before converting to numeric, fix some data entry issues 
+# (should all be fixed now in database for future downloads).
 data_min$`VE BTPS1`[data_min$`VE BTPS1` == "22..17"] <- "22.17"
 data_min$`VE BTPS3`[data_min$`VE BTPS3` == "\\"] <- NA
 data_min$`VE BTPS4`[data_min$`VE BTPS4` == "b/a"] <- NA
@@ -92,6 +93,7 @@ data_min[] <- lapply(data_min, as.numeric)
 
 # Add COP column to the MAIN dataset.
 data <- mutate(data, COP = NA)
+data <- mutate(data, COP_minute = NA)
 
 # Now add in COP (find lowest VE/VO2 from minute data and add that to data.
 for(i in 1:nrow(data_min)){
@@ -138,6 +140,11 @@ for(i in 1:nrow(data_min)){
       if(!all(is.na(cop_vec))){
         data$COP[(data$ID == as.numeric(temp_id)) &
                    (data$test_number == as.numeric(temp_test_num))] <- min(cop_vec, na.rm = T)
+        
+        # Add the test minute in which the COP occurred.
+        data$COP_minute[(data$ID == as.numeric(temp_id)) &
+                          (data$test_number == as.numeric(temp_test_num))] <- 
+          which(cop_vec == min(cop_vec, na.rm = T))[1]
       }
     }
   }
@@ -164,8 +171,83 @@ data <- mutate(data, FRIEND_pct =
                  FRIENDanalysis::FRIENDpercentile(VO2 = VO2_rel, age = age, sex = sex, 
                                                   ex_mode = test_mode, ref_edition = 2))
 
+# Add in what percentage of total test time the COP occurred.
+data <- mutate(data, COP_perc_tot_time = 
+                 round((COP_minute / test_time)*100, 1))
+
+#####################################################################
+# Reviewer asked for metabolic syndrome status so adding that determination in here.
+#####################################################################
+
+# Create metabolic syndrome coding based on NCEP from GETP11 p292 Table 9.2. 
+# NCEP differs as it says > not ≥ 102/88 for waist.
+
+# If a value is missing, person is coded as having MS factor if meds is yes.
+# If value missing and meds is no, then MS factor coded as missing.
+
+# Body Weight - uses waist circumference.
+data <- mutate(data, MS_waist = ifelse(data$sex=="Male" & data$waist >102, 1,
+                                       ifelse(data$sex=="Male" & data$waist <=102,0,
+                                              ifelse(data$sex=="Female" & data$waist >88,1,
+                                                     ifelse(data$sex=="Female" & data$waist <=88,0,NA)))))
+
+# Insulin resistance/glucose - uses fasting glucose and medication
+data <- mutate(data, diabetes_meds = as.numeric(data$med_diabetes))
+data <- mutate(data, diabetes_vals = ifelse(data$glucose>=100, 1, 
+                                            ifelse(data$glucose<100, 0, NA)))
+data <- mutate(data, MS_glucose = rowSums(data[,c("diabetes_meds", "diabetes_vals")], na.rm = T))
+data$MS_glucose[is.na(data$diabetes_vals) & data$diabetes_meds == 0 ] <- NA
+data$MS_glucose[data$MS_glucose>1] <- 1
+data <- subset(data, select = -c(diabetes_meds, diabetes_vals))
+
+# HDL - only uses values (database doesn't have status on HDL medication).
+data <- mutate(data, MS_hdl = ifelse(data$sex=="Male" & data$hdl <40, 1,
+                                     ifelse(data$sex=="Male" & data$hdl >= 40,0,
+                                            ifelse(data$sex=="Female" & data$hdl <50,1,
+                                                   ifelse(data$sex=="Female" & data$hdl >= 50, 0, NA)))))
+
+# Triglycerides - uses values and medications.
+# Find meds related to triglycerides for coding.
+dataMeds <- data %>%
+  select("ID", "test_number", "record_date", "medBrand", "medReason")
+# Fill in the ID, test number, and date.
+dataMeds <- dataMeds %>% tidyr::fill("ID", "test_number", "record_date")
+# Coding for trig meds is either "Yes" or NA.
+dataMeds <- mutate(dataMeds, trigMeds = ifelse(medBrand == "Niaspan" | medReason == "Triglycerides", 1, NA))
+# Select only those that were taking triglyceride meds (and only 1 row from that test).
+dataMeds <- filter(dataMeds, trigMeds == 1)
+dataMeds <- dataMeds %>%
+  group_by(ID, record_date) %>% 
+  slice(1L) %>%
+  ungroup(ID)
+# Combine the datasets.
+dataMeds <- dataMeds %>% select(-c(medBrand, medReason))
+data <- left_join(data, dataMeds, by = c("ID", "test_number", "record_date"))
+# Now can code for triglyceride status.
+data <- mutate(data, trig_vals = ifelse(data$trig >= 150, 1, 
+                                        ifelse(data$trig < 150, 0, NA)))
+data <- mutate(data, MS_trig = rowSums(data[,c("trigMeds", "trig_vals")], na.rm = T))
+data$MS_trig[is.na(data$trig_vals) & is.na(data$trigMeds)] <- NA
+data$MS_trig[data$MS_trig>1] <- 1
+data <- subset(data, select = -c(trig_vals))
+
+# Elevated BP - uses sBP, dBP, and/or meds.
+#### This one allows for missing values and will use just medication status.
+data <- mutate(data, hypertension_meds = as.numeric(data$med_hypertensives))
+data <- mutate(data, hypertension_vals = ifelse(data$resting_sbp>=130 | data$resting_dbp>=85, 1,
+                                                ifelse(data$resting_sbp<130 | data$resting_dbp<85, 0, NA)))
+data <- mutate(data, MS_bp = rowSums(data[,c("hypertension_meds","hypertension_vals")],na.rm = T))
+data$MS_bp[is.na(data$hypertension_vals) & data$hypertension_meds==0] <- NA
+data$MS_bp[data$MS_bp>1] <- 1
+data <- subset(data, select = -c(hypertension_meds, hypertension_vals))
+
+# Determine if someone has metabolic syndrome (need to have 3 or more).
+data <- mutate(data, MS_riskFactors = rowSums(data[,c("MS_waist", "MS_trig", "MS_hdl", "MS_bp", "MS_glucose")]))
+data <- mutate(data, MS_diagnosis = ifelse(data$MS_riskFactors>2, 1, 0))
+
+
 ###########################################################################################
 # Save files.
 ###########################################################################################
 
-write_xlsx(data, here::here("../CLEANED COP dataset_10_29_2021.xlsx"))
+write_xlsx(data, here::here("../CLEANED_COP_dataset_2_7_2022.xlsx"))
