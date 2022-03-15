@@ -1,8 +1,9 @@
 # Examining the Prognostic Potential of COP
 
-**_In brief_**, cardiorespiratory optimal point (COP) is the minimum ventilatory equivalent for oxygen and can be determined during a submaximal incremental exercise test. This study investigated the relationship between COP and all-cause mortality in the BALL ST cohort with the goal of understanding the utility of COP assessments in clinical settings. **The results indicated COP is related to all-cause mortality in males but not females thus suggesting a determination of COP can have prognostic utility in healthy males aged 18–85 years old, which may be relevant when a maximal exercise test is not feasible or desirable.**
+## Summary:
+Cardiorespiratory optimal point (COP) is the minimum ventilatory equivalent for oxygen and can be determined during a submaximal incremental exercise test. This study investigated the relationship between COP and all-cause mortality in the BALL ST cohort with the goal of understanding the utility of COP assessments in clinical settings. **The results indicated COP is related to all-cause mortality in males but not females thus suggesting a determination of COP can have prognostic utility in healthy males aged 18–85 years old, which may be relevant when a maximal exercise test is not feasible or desirable.**
 
-### The Rationale:
+## The Rationale:
 The American Heart Association [recommends]( https://pubmed.ncbi.nlm.nih.gov/27881567/) cardiopulmonary exercise testing in routine clinical practice to improve patient management and risk stratification. This testing though, requires an individual to perform a maximal effort and this maximal effort is speculated to be a reason why testing is not commonly performed in clinical practice.
 
 Cardiorespiratory optimal point (COP) is defined as the minimum ventilatory equivalent for oxygen (ventilation divided by oxygen uptake [VE/VO<sub>2</sub>]) at any given minute during an incremental exercise test. COP reflects the optimal interaction between the respiratory and cardiovascular systems and follows a U-shaped curve during increasing exercise intensities (meaning COP occurs at submaximal intensities). Because COP can be assessed with a submaximal rather than a maximal exercise test, it could improve the uptake of exercise testing in clinical settings if it provides prognostic utility. 
@@ -10,15 +11,15 @@ Cardiorespiratory optimal point (COP) is defined as the minimum ventilatory equi
 Previous research highlights the potential prognostic utility of COP; however, additional research with larger sample sizes of males and (particularly) females is needed to substantiate this relationship in apparently healthy adults. Thus, **the purpose of this study was to evaluate the relationship between COP and all-cause mortality in a cohort of apparently healthy males and females.**
 
 
-### The Final Product/Results:
+## The Final Product/Results:
 Two scripts for R were used to create the dataset from the BALL ST cohort and then analyze the data. Prediction models using COP were related to mortality in males independent of traditional risk factors, including peak VO<sub>2</sub> (the traditional variable of interest from a maximal cardiopulmonary exercise test). There were sex differences in the predictive capability of COP though, as only the univariate COP model was significantly associated with mortality in females.
 
 Further, the concordance index values from the models indicated the fully-adjusted COP models did not statistically differ compared to the fully-adjusted peak VO<sub>2</sub> models. Peak VO<sub>2</sub> also did not complement COP models and COP did not complement peak VO<sub>2</sub> models. These findings suggest determinations of COP alone could be beneficial when a determination of peak VO<sub>2</sub> from a maximal test is not feasible or desirable as peak VO<sub>2</sub> did not improve risk discrimination.
 
 Following the data analysis, I summarized the findings of this study and submitted the scientific manuscript to the Journal of Cardiopulmonary Rehabilitation and Prevention. The manuscript was peer reviewed by experts in the field and accepted for publication (_link to be added once the manuscript is officially published_). 
 
-### The Process:
-##### Dataset creation.
+## The Process:
+### Dataset creation.
 The data for this study comes from the BALL ST cohort (a database for a longitudinal fitness program). To create the dataset for analysis, I first had to wrangle, clean, analyze, and combine two datasets:
 1) Dataset consisting of health screening information, summary data from a cardiopulmonary exercise test (cardiopulmonary exercise test), and mortality status/cause.
 2) Dataset consisting of data from each minute of a cardiopulmonary exercise test. This dataset is in a "long" format and is not available for every participant. This dataset was also used to calculate the COP for each individual since the COP was not readily available in the database.
