@@ -22,7 +22,7 @@ Following the data analysis, I summarized the findings of this study and submitt
 ### Dataset creation.
 The data for this study comes from the BALL ST cohort (a database for a longitudinal fitness program). To create the dataset for analysis, I first had to wrangle, clean, analyze, and combine two datasets:
 1) Dataset consisting of health screening information, summary data from a cardiopulmonary exercise test (cardiopulmonary exercise test), and mortality status/cause.
-2) Dataset consisting of data from each minute of a cardiopulmonary exercise test. This dataset is in a "long" format and is not available for every participant. This dataset was also used to calculate the COP for each individual since the COP was not readily available in the database.
+2) Dataset consisting of data from each minute of a cardiopulmonary exercise test. This dataset is in a "wide" format and is not available for every participant. This dataset was also used to calculate the COP for each individual since the COP was not readily available in the database.
 
 The data wrangling and cleaning relied heavily on the R package dplyr. Data were filtered to exclude extraneous values and to meet the inclusion criteria of the study (e.g., exercise test performed on a treadmill, aged 18-85 years old, at least 1 year of follow-up since the exercise test). 
 
