@@ -38,9 +38,9 @@ During the peer review process, a reviewer asked for information regarding the p
 The analysis examines the ability of COP to predict all-cause mortality using Cox proportional hazard models as a means of assessing the prognostic potential of COP. Additionally, the script used for analysis outputs findings into tables that are saved as a .xlsx file to facilitate table preparation in manuscripts (i.e., allows for copy/pasting results into a Word file).
 
 Similar analysis is used in other studies of the BALLST cohort, so this analysis was designed robustly for examining other variables of interest. Seven different models were examined:
-1) Univariate (just COP [or peak VO<sub>2</sub>)])
-2) Multivariate (COP [or peak VO<sub>2</sub>)], age, sex, and test date)
-3) Multivariate (COP [or peak VO<sub>2</sub>)], age, sex, test date, and risk factors as binary variables (obesity, hypertension, dyslipidemia, diabetes, inactivity, smoking status))
+1) Univariate (just COP [_or peak VO<sub>2</sub>)_])
+2) Multivariate (COP [_or peak VO<sub>2</sub>)_], age, sex, and test date)
+3) Multivariate (COP [_or peak VO<sub>2</sub>)_], age, sex, test date, and risk factors as binary variables (obesity, hypertension, dyslipidemia, diabetes, inactivity, smoking status))
 4) Multivariate (COP, age, sex, test date, risk factors as binary variables (obesity, hypertension, dyslipidemia, diabetes, inactivity, smoking status), and peak VO<sub>2</sub>))
 
 Schoenfeld residuals were examined to assess the assumption of proportional hazards underlying the Cox models. The relationships between the Schoenfeld residuals and the model covariates were either not statistically significant (_P_>0.05), indicating the proportional hazards assumption was met, or the residuals were plotted and the fit line of the plots fell within the confidence interval bounds for a horizontal linear trend suggesting statistically significant violations were not problematic
