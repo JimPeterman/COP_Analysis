@@ -12,7 +12,7 @@ Previous research highlights the potential prognostic utility of COP; however, a
 
 
 ## The Final Product/Results:
-Three scripts for R were used to create the dataset from the BALL ST cohort and then analyze/visualize the data. Prediction models using COP were related to mortality in males independent of traditional risk factors, including peak VO<sub>2</sub> (the traditional variable of interest from a maximal cardiopulmonary exercise test). There were sex differences in the predictive capability of COP though, as only the univariate COP model was significantly associated with mortality in females. The Kaplan-Meier curves below illustrate the sex differences:
+Three scripts for R were used to create the dataset from the BALL ST cohort and then analyze/visualize the data. Prediction models using COP were related to mortality in males independent of traditional risk factors, including peak VO<sub>2</sub> (the traditional variable of interest from a maximal cardiopulmonary exercise test). There were sex differences in the predictive capability of COP though, as only the univariate COP model was significantly associated with mortality in females. The Kaplan-Meier curves below illustrate the sex differences (the overlapping curves observed with females indicate COP could not differentiate mortality risk):
 
  ![Kaplan_Plot](images/km_plot.png)
 
