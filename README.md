@@ -12,7 +12,9 @@ Previous research highlights the potential prognostic utility of COP; however, a
 
 
 ## The Final Product/Results:
-Two scripts for R were used to create the dataset from the BALL ST cohort and then analyze the data. Prediction models using COP were related to mortality in males independent of traditional risk factors, including peak VO<sub>2</sub> (the traditional variable of interest from a maximal cardiopulmonary exercise test). There were sex differences in the predictive capability of COP though, as only the univariate COP model was significantly associated with mortality in females.
+Three scripts for R were used to create the dataset from the BALL ST cohort and then analyze/visualize the data. Prediction models using COP were related to mortality in males independent of traditional risk factors, including peak VO<sub>2</sub> (the traditional variable of interest from a maximal cardiopulmonary exercise test). There were sex differences in the predictive capability of COP though, as only the univariate COP model was significantly associated with mortality in females. The Kaplan-Meier curves below illustrate the sex differences:
+
+ ![Kaplan_Plot](images/km_plot.png)
 
 Further, the concordance index values from the models indicated the fully-adjusted COP models did not statistically differ compared to the fully-adjusted peak VO<sub>2</sub> models. Peak VO<sub>2</sub> also did not complement COP models and COP did not complement peak VO<sub>2</sub> models. These findings suggest determinations of COP alone could be beneficial when a determination of peak VO<sub>2</sub> from a maximal test is not feasible or desirable as peak VO<sub>2</sub> did not improve risk discrimination.
 
@@ -48,3 +50,5 @@ Schoenfeld residuals were examined to assess the assumption of proportional haza
 The analysis explored relationships across the whole cohort as well as within males and females separately. Comparisons of predictive capability were also made between COP and the traditional variable of interest from a maximal cardiopulmonary exercise test (peak VO<sub>2</sub>) by statistically comparing concordance values.
 
 Descriptive statistics were also performed to summarize baseline characteristics of the participants. To test for differences between sexes and mortality status (survivor vs. deceased), independent samples t-tests and Chi-square tests were performed when appropriate. In cases when significant statistical results were found, significance symbols were added within the summary table to further facilitate the ease of copy/pasting results into publication-ready tables in Microsoft Word.
+
+To create a visualization for this study, I created Kaplan-Meier Curves using the survminer package in R. The male and female plots were combined into one figure and can be seen above.
