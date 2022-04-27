@@ -350,7 +350,7 @@ for(p in 1:length(group_type)){
         # Create a summary of the Cox analysis.
         models <- c("res_cox_uni", "res_cox_multi_2", "res_cox_multi_3", "res_cox_multi_4",
                     "res_cox_uni_VO2", "res_cox_multi_2_VO2", "res_cox_multi_3_VO2")
-        temp_summary <- data.frame(c("Univariate", "Age, sex, test year", 
+        temp_summary <- data.frame(c("Univariate", "Age, test year", 
                                      "Age, test year, obesity, hypertension, dyslipidemia, diabetes, PA, smoking",
                                      "Age, test year, obesity, hypertension, dyslipidemia, diabetes, PA, smoking, VO2max"))
         colnames(temp_summary)[1] <- paste(var_int[i], death_var[k], sep = "_")
@@ -403,8 +403,8 @@ for(p in 1:length(group_type)){
         int_model <- c("res_cox_uni", "res_cox_multi_2", "res_cox_multi_3")
         VO2_models <- c("res_cox_uni_VO2", "res_cox_multi_2_VO2", "res_cox_multi_3_VO2")
         
-        concordance_summary <- data.frame("Model_Comparison" = c("Univariate", "Age, Sex, Test Year", 
-                                                                 "Age, Sex, Testing Year, and Risk Factors","","",
+        concordance_summary <- data.frame("Model_Comparison" = c("Univariate", "Age, Test Year", 
+                                                                 "Age, Testing Year, and Risk Factors","","",
                                                                  paste("Adding", var_int[i], "to VO2 Model"),
                                                                  "","", paste("Adding VO2 to", var_int[i], "Model"),
                                                                  "","","Correlations"))
