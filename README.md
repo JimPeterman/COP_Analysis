@@ -18,7 +18,7 @@ Three scripts for R were used to create the dataset from the BALL ST cohort and 
 
 Further, the concordance index values from the models indicated the fully-adjusted COP models did not statistically differ compared to the fully-adjusted peak VO<sub>2</sub> models. Peak VO<sub>2</sub> also did not complement COP models and COP did not complement peak VO<sub>2</sub> models. These findings suggest determinations of COP alone could be beneficial when a determination of peak VO<sub>2</sub> from a maximal test is not feasible or desirable as peak VO<sub>2</sub> did not improve risk discrimination.
 
-Following the data analysis, I summarized the findings of this study and submitted the scientific manuscript to the Journal of Cardiopulmonary Rehabilitation and Prevention. The manuscript was peer reviewed by experts in the field and accepted for publication (_link to be added once the manuscript is officially published_). 
+Following the data analysis, I summarized the findings of this study and submitted the scientific manuscript to the Journal of Cardiopulmonary Rehabilitation and Prevention. The manuscript was peer reviewed by experts in the field and accepted for publication (the published paper can be found [HERE](https://journals.lww.com/jcrjournal/Fulltext/9900/Cardiorespiratory_Optimal_Point_Is_a_Submaximal.21.aspx)). 
 
 ## The Process:
 ### Dataset creation.
