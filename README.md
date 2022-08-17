@@ -1,7 +1,8 @@
 # Examining the Prognostic Potential of COP
 
 ## Summary:
-Cardiorespiratory optimal point (COP) is the minimum ventilatory equivalent for oxygen and can be determined during a submaximal incremental exercise test. This study investigated the relationship between COP and all-cause mortality in the BALL ST cohort with the goal of understanding the utility of COP assessments in clinical settings. **The results indicated COP is related to all-cause mortality in males but not females thus suggesting a determination of COP can have prognostic utility in healthy males aged 18–85 years old, which may be relevant when a maximal exercise test is not feasible or desirable.**
+Cardiorespiratory optimal point (COP) is the minimum ventilatory equivalent for oxygen and can be determined during a submaximal incremental exercise test. This study investigated the relationship between COP and all-cause mortality in the BALL ST cohort with the goal of understanding the utility of COP assessments in clinical settings. As shown in the visual abstract below, **the results indicated COP is related to all-cause mortality in males but not females thus suggesting a determination of COP can have prognostic utility in healthy males aged 18–85 years old, which may be relevant when a maximal exercise test is not feasible or desirable.** 
+![visual_abstract](images/visual_abstract.png)
 
 ## The Rationale:
 The American Heart Association [recommends]( https://pubmed.ncbi.nlm.nih.gov/27881567/) cardiopulmonary exercise testing in routine clinical practice to improve patient management and risk stratification. This testing though, requires an individual to perform a maximal effort and this maximal effort is speculated to be a reason why testing is not commonly performed in clinical practice.
@@ -18,7 +19,7 @@ Three scripts for R were used to create the dataset from the BALL ST cohort and 
 
 Further, the concordance index values from the models indicated the fully-adjusted COP models did not statistically differ compared to the fully-adjusted peak VO<sub>2</sub> models. Peak VO<sub>2</sub> also did not complement COP models and COP did not complement peak VO<sub>2</sub> models. These findings suggest determinations of COP alone could be beneficial when a determination of peak VO<sub>2</sub> from a maximal test is not feasible or desirable as peak VO<sub>2</sub> did not improve risk discrimination.
 
-Following the data analysis, I summarized the findings of this study and submitted the scientific manuscript to the Journal of Cardiopulmonary Rehabilitation and Prevention. The manuscript was peer reviewed by experts in the field and accepted for publication (the published paper can be found [HERE](https://journals.lww.com/jcrjournal/Fulltext/9900/Cardiorespiratory_Optimal_Point_Is_a_Submaximal.21.aspx)). 
+Following the data analysis, I summarized the findings of this study and submitted the scientific manuscript to the Journal of Cardiopulmonary Rehabilitation and Prevention. The manuscript was peer reviewed by experts in the field and accepted for publication ([the published paper can be found here](https://journals.lww.com/jcrjournal/Fulltext/9900/Cardiorespiratory_Optimal_Point_Is_a_Submaximal.21.aspx)). 
 
 ## The Process:
 ### Dataset creation.
