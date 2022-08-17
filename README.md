@@ -1,7 +1,8 @@
 # Examining the Prognostic Potential of COP
 
 ## Summary:
-Cardiorespiratory optimal point (COP) is the minimum ventilatory equivalent for oxygen and can be determined during a submaximal incremental exercise test. This study investigated the relationship between COP and all-cause mortality in the BALL ST cohort with the goal of understanding the utility of COP assessments in clinical settings. As shown in the visual abstract below, **the results indicated COP is related to all-cause mortality in males but not females thus suggesting a determination of COP can have prognostic utility in healthy males aged 18–85 years old, which may be relevant when a maximal exercise test is not feasible or desirable.** 
+Cardiorespiratory optimal point (COP) is the minimum ventilatory equivalent for oxygen and can be determined during a submaximal incremental exercise test. This study investigated the relationship between COP and all-cause mortality in the BALL ST cohort with the goal of understanding the utility of COP assessments in clinical settings. As shown in the visual abstract below, **the results indicated COP is related to all-cause mortality in males but not females thus suggesting a determination of COP can have prognostic utility in healthy males aged 18–85 years old, which may be relevant when a maximal exercise test is not feasible or desirable:** 
+
 ![visual_abstract](images/visual_abstract.png)
 
 ## The Rationale:
